@@ -1,4 +1,4 @@
-/plot specific heat of solids
+//plot specific heat of solids
 clc;clear;clf;
 k=1.38e-23;n=6.022e23;
 Te=input("enter the einstein temperature")
