@@ -1,0 +1,21 @@
+//relativistic 3D bosons
+clf;clc;clear;
+h=6.626e-34;m=4*1.67e-27;v=1;s=1;k=1.38e-23;u=-1;e=1.6e-19;c=3e8;
+E=0:0.001:6;
+T=[10^9 10^10]
+cn=(2*s*4*3.14*v)/((h^3)*(c^3))
+for j=1:length(T)
+b=1/(k*T(j))
+for i=1:length(E)
+g(i)=cn*(E(i)^2);
+n(j,i)=1/(exp((E(i)-u)*10^6*b*e)-1);
+f(j,i)=g(i)*n(j,i)
+end
+subplot(2,3,j*j)
+plot(E',g)
+xlabel('g(E)')
+subplot(2,3,j*j+1)
+plot(E',n)
+subplot(2,3,j*j+2)
+plot(E',f)
+end
