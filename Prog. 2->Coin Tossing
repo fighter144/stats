@@ -1,0 +1,12 @@
+clc;clear;clf;
+N=input("enter the no of coins") //=no of steps
+microstates=2^N;
+for n=0:N //n=no of heads = forward steps
+prob=factorial(N)/(factorial(n)*factorial(N-n));
+H(n+1)=n;
+P(n+1)=prob/microstates
+end
+h=input("enter the no of heads")
+disp(P(h+1))
+plot(H,P,'-o-')
+bar(H,P,width=0.4)
