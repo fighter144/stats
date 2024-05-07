@@ -1,3 +1,4 @@
+//relativistic 3D fermions
 clf;clc;clear;
 h=6.626e-34;m=9.1e-31;v=1;s=0.5;k=1.38e-23;u=1;e=1.6e-19;c=3e8;
 E=0:0.001:2;
