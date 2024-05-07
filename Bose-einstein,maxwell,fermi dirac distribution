@@ -1,7 +1,7 @@
 funcprot(0);clear;clc;clf();
-function f=dist(e,u,t,A)
-    k=8.617D-5;
-    f=1./(exp((e-u)./(k.*t))+A)
+function f=dist(e, u, t, A)
+k=8.617D-5;
+f=1./(exp((e-u)./(k.*t))+A)
 endfunction
 u1=0.5;u2=-0.5;u3=-1;u=5;
 e1=linspace(0,10,500)
@@ -11,49 +11,48 @@ s=['--',':b','.-']
 t=[500 1000 1500]
 t1=[0 1000 5000]
 for i=1:length(t)
-    T=t(i)
-    T1=t1(i)
-    mb=dist(e1,u1,T,0)
-    fd=dist(e1,u,T1,1)
-    be=dist(e3,u3,T,-1)
-    
-    subplot(2,2,1)
-    plot(e1,mb,s(i))
-    a=gca()
-    a.data_bounds=[u1,0;1,1]
-    legend('T=500K','T=1000K','T=1500K')
-    title("Maxwell Boltzmann Distribution")
-    xlabel("$\epsilon$")
-    ylabel('$n_i/g_i$')
-
-    subplot(2,2,2)
-    plot(e2,be,s(i))
-    a=gca()
-    a.data_bounds=[u2,0;0.5,1]
-    legend('T=500K','T=1000K','T=1500K')
-    title('$Bose Einstein Distribution at \mu=-0.5eV$')
-    xlabel("$\epsilon$")
-    ylabel('$n_i/g_i$')
-    
-    subplot(2,2,3)
-    plot(e1,fd,s(i))
-    a=gca()
-    a.data_bounds=[0,0;8,1.2]
-    legend('T=500K','T=1000K','T=1500K')
-    title('$Fermi-Dirac- Distribution at \mu=5eV$')
-    xlabel("$\epsilon$")
-    ylabel('$n_i/g_i$')
-    
-    subplot(2,2,4)
-    mb1=dist(e3,0,1000,0)
-    fd1=dist(e3,0,1000,1)
-    be1=dist(e3,0,1000,-1)
-    plot(e3,mb1,'',e3,be1,'--',e3,fd1,'.-')
-    a=gca()
-    a.data_bounds=[-0.5,0;0.5,1.3]
-    legend('Maxwell Boltzmann','Bose Einstein','Fermi Dirac')
-    title("comparison at T=1000K")
-    xlabel("$\epsilon$")
-    ylabel('$n_i/g_i$')
-
+T=t(i)
+T1=t1(i)
+mb=dist(e1,u1,T,0)
+fd=dist(e1,u,T1,1)
+be=dist(e3,u3,T,-1)
+subplot(2,2,1)
+plot(e1,mb,s(i))
+a=gca()
+a.data_bounds=[u1,0;1,1]
+legend('T=500K','T=1000K','T=1500K')
+title("Maxwell Boltzmann Distribution")
+xlabel("$\epsilon$")
+ylabel('$n_i/g_i$')
+subplot(2,2,2)
+plot(e2,be,s(i))
+a=gca()
+a.data_bounds=[u2,0;0.5,1]
+legend('T=500K','T=1000K','T=1500K')
+title('$Bose Einstein Distribution at \mu=-0.5eV$')
+xlabel("$\epsilon$")
+ylabel('$n_i/g_i$')
+subplot(2,2,3)
+plot(e1,fd,s(i))
+a=gca()
+a.data_bounds=[0,0;8,1.2]
+legend('T=500K','T=1000K','T=1500K')
+title('$Fermi-Dirac- Distribution at \mu=5eV$')
+xlabel("$\epsilon$")
+ylabel('$n_i/g_i$')
+subplot(2,2,4)
+mb1=dist(e3,0,1000,0)
+fd1=dist(e3,0,1000,1)
+be1=dist(e3,0,1000,
+-1)
+plot(e3,mb1,'',e3,be1,'
+--
+',e3,fd1,'.-
+')
+a=gca()
+a.data_bounds=[-0.5,0;0.5,1.3]
+legend('Maxwell Boltzmann','Bose Einstein','Fermi Dirac')
+title("comparison at T=1000K")
+xlabel("$\epsilon$")
+ylabel('$n_i/g_i$')
 end
