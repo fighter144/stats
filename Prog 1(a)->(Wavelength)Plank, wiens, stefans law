@@ -5,21 +5,20 @@ c=3e8;
 T=3000:1000:6000;
 T0=5000;
 w1=0.1:0.005:10;
-
 w=w1.*10^-6; //wavelength in micrometres
 A=8*3.14*h*c;
 for j=1:length(T)
-    for i=1:length(w)
-        up(j,i)=(A/w(i)^5)/(exp((h*c)/(w(i)*k*T(j)))-1);
-        ur(j,i)=8*3.14*k*T(j)/(w(i)^4);
-        uw(j,i)=(A/w(i)^5)/(exp((h*c)/(w(i)*k*T(j))));
-    end
-    if T(j)==T0
-        q=j;
-    end
-    [p,x]=max(up(j,:));
-    wmax(j)=w1(x);
-    U(j)=(10^-6*0.005)*sum(up(j,:))
+for i=1:length(w)
+up(j,i)=(A/w(i)^5)/(exp((h*c)/(w(i)*k*T(j)))-1);
+ur(j,i)=8*3.14*k*T(j)/(w(i)^4);
+uw(j,i)=(A/w(i)^5)/(exp((h*c)/(w(i)*k*T(j))));
+end
+if T(j)==T0
+q=j;
+end
+[p,x]=max(up(j,:));
+wmax(j)=w1(x);
+U(j)=(10^-6*0.005)*sum(up(j,:))
 end
 disp(U)
 subplot(2,2,1)
@@ -28,7 +27,6 @@ legend('T='+string(T)+'K')
 xlabel('$\lambda(\mu m)$','fontsize',3);
 ylabel('$u(\lambda)$','fontsize',3);
 title("Planks Law")
-
 subplot(2,2,2)
 T4=T.^4;E=U.*(c/4)
 plot(T4',E,'-o-','linewidth',2)
@@ -37,16 +35,14 @@ xlabel('$\lambda(\mu m)$','fontsize',3);
 ylabel('$u(\lambda)$','fontsize',3);
 [sigma,d]=reglin(T4,E');
 disp(sigma)
-
 subplot(2,2,3)
 ti=1./T;
 plot(ti,wmax','-o-','linewidth',2)
-title("Weins  Law")
+title("Weins Law")
 xlabel('$\lambda(\mu m)$','fontsize',3);
 ylabel('$u(\lambda)$','fontsize',3);
 [b,a]=reglin(ti,wmax');
 disp(b)
-
 subplot(2,2,4)
 plot(w1',up(q,:),w1',ur(q,:),w1',uw(q,:),'linewidth',2)
 title("comparison")
