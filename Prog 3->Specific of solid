@@ -5,14 +5,14 @@ Te=input("enter the einstein temperature")
 Td=input("enter the debye temperature")
 T=0:2:Td;
 for i=1:length(T)
-    cv(i)=3*n*k;
-    if T(i)==0
-        cve(i)=0;cvd(i)=0;
-    else
-        cve(i)=(3*n*k*(Te/T(i))^2)*(exp(Te/T(i))/(exp(Te/T(i))-1)^2);
-        I=integrate('y^4*exp(y)/(exp(y)-1)^2','y',0,Td/T(i))
-        cvd(i)=9*n*k*(T(i)/Td)^3*I;
-    end
+cv(i)=3*n*k;
+if T(i)==0
+cve(i)=0;cvd(i)=0;
+else
+cve(i)=(3*n*k*(Te/T(i))^2)*(exp(Te/T(i))/(exp(Te/T(i))-1)^2);
+I=integrate('y^4*exp(y)/(exp(y)-1)^2','y',0,Td/T(i))
+cvd(i)=9*n*k*(T(i)/Td)^3*I;
+end
 end
 plot(T',cv/(n*k),T',cve/(n*k),T',cvd/(n*k))
 a=gca()
