@@ -1,39 +1,29 @@
-clear;clf;clear;clc;
-k=8.67D-5
-E=1;g=1;
-T=0:0.1:1D5
-betaE=(1./(k.*T))*E
+//plot the probability of the given partition function
+clc;clf();clear;
+beeta=1e-30:0.001:2;
+E=5;
 
-z=1+2.*exp(-betaE)+2.*exp(-2.*betaE)+exp(-3.*betaE)                 //fermions
-z1=3+2.*exp(-betaE)+3.*exp(-2.*betaE)+exp(-3.*betaE)+exp(-4.*betaE) //bosons
-
-energy=(2.*exp(-betaE)+4.*exp(-2.*betaE)+3.*exp(-3.*betaE))./(z)
-energy1=(2.*exp(-betaE)+6.*exp(-2.*betaE)+3.*exp(-3.*betaE)+4.*exp(-4.*betaE))./(z1)
-
-entropy= k.*log(z)+energy./T
-entropy1=k.*log(z1)+energy1./T
-
-cv=((z.*(2.*exp(-betaE)+8.*exp(-2.*betaE)+9.*exp(-3.*betaE))-((2.*exp(-betaE)+4.*exp(-2*betaE)+3.*exp(-3.*betaE)).*(2.*exp(-betaE)+4.*exp(-2.*betaE)+3.*exp(-3.*betaE))))./((z^2).(k.*T^2)))
-
-cv1=((z1.*(2.*exp(-betaE)+12.*exp(-2.*betaE)+9.*exp(-3.*betaE)+4.*exp(-4.*betaE))-((2.*exp(-betaE)+6.*exp(-2*betaE)+3.*exp(-3.*betaE)+4.*exp(-4.*betaE)).*(2.*exp(-betaE)+6.*exp(-2.*betaE)+3.*exp(-3.*betaE)+4.*exp(-4.*betaE))))./((z1^2).(k.*T^2)))
-
+//k=8.6173303e-5
+P0=1./(exp(-beeta*E)+1)
+P1=exp(-beeta*E)./(1+exp(-beeta*E))
 subplot(2,2,1)
-plot(k.*T,energy)
-plot(k.*T,energy1,"--")
-xlabel('$ KT/ \epsilon $')
-ylabel('$ E /N\epsilon$')
-legend("Fermions","Bosons")
-
+plot(beeta,[P0' P1'])
+xlabel("beeta")
+ylabel("probability")
+legend(['P0'; 'P1'])
+Ev=E*P1
 subplot(2,2,2)
-plot(k.*T,entropy./k)
-plot(k.*T,entropy1./k,"--")
-ylabel('$ S/K  $')
-xlabel('$ KT/ \epsilon $')
-legend("Fermions","Bosons")
-
+plot(beeta,Ev')
+xlabel("beeta")
+ylabel("average energy")
+x=exp(-beeta*E)./((1+exp(-beeta*E))^2)
+cv=(E*beeta)^2.*P0.*P1
 subplot(2,2,3)
-plot(k.*T,cv./k)
-plot(k.*T,cv1./k,"--")
-xlabel('$ KT/ \epsilon $')
-ylabel('$ C_v /K$')
-legend("Fermions","Bosons")
+xlabel("beeta")
+ylabel("specific heat")
+plot(beeta,cv')
+s=log(1./P0)+Ev.*beeta
+subplot(2,2,4)
+plot(beeta,s')
+xlabel("beeta")
+ylabel("Entropy")
