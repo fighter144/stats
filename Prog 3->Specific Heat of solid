@@ -1,23 +1,79 @@
-//plot specific heat of solids
-clc;clear;clf;
-k=1.38e-23;n=6.022e23;
-Te=input("enter the einstein temperature")
-Td=input("enter the debye temperature")
-T=0:2:Td;
-for i=1:length(T)
-cv(i)=3*n*k;
-if T(i)==0
-cve(i)=0;cvd(i)=0;
-else
-cve(i)=(3*n*k*(Te/T(i))^2)*(exp(Te/T(i))/(exp(Te/T(i))-1)^2);
-I=integrate('y^4*exp(y)/(exp(y)-1)^2','y',0,Td/T(i))
-cvd(i)=9*n*k*(T(i)/Td)^3*I;
+clc;
+clear;
+clf;
+
+// Constants
+k = 1.38e-23;              // Boltzmann constant (J/K)
+n = 6.022e23;              // Avogadro's number (1/mol)
+
+// Inputs
+Te = input("Enter the Einstein temperature (K): ");
+Td = input("Enter the Debye temperature (K): ");
+
+// Temperature range
+T = 0:2:Td;                // From 0 to Td in steps of 2
+cv = zeros(T);
+cve = zeros(T);
+cvd = zeros(T);
+
+// Define Debye integrand as a scalar-input function
+function y = debye_integrand(x)
+    den = (exp(x) - 1);
+    if den == 0 then
+        y = 0;
+    else
+        y = (x^4 * exp(x)) / (den^2);
+    end
+endfunction
+
+// Loop to compute Cv values
+for i = 1:length(T)
+    if T(i) == 0 then
+        cv(i) = 0;
+        cve(i) = 0;
+        cvd(i) = 0;
+    else
+        // Dulong-Petit Law
+        cv(i) = 3 * n * k;
+
+        // Einstein Model
+        x = Te / T(i);
+        cve(i) = 3 * n * k * x^2 * exp(x) / ((exp(x) - 1)^2);
+
+        // Debye Model using intg()
+        upper_limit = Td / T(i);
+        I = intg(0, upper_limit, debye_integrand);
+        cvd(i) = 9 * n * k * (T(i) / Td)^3 * I;
+    end
 end
-end
-plot(T',cv/(n*k),T',cve/(n*k),T',cvd/(n*k))
-a=gca()
-a.data_bounds=[0,0;220,3.2]
-ylabel('$C_v/NK_b$')
-xlabel('$T$')
-legend('Dulong-Petits Law','Einstein Dist','Debye Dist.')
-title('Plot for specific heats of solids')
+
+// Normalize by (n * k)
+cv = cv / (n * k);
+cve = cve / (n * k);
+cvd = cvd / (n * k);
+
+// Prepare for plotting
+T = matrix(T, -1, 1);           // Make T a column vector
+
+// Plot and customize lines after
+plot2d(T, [cv', cve', cvd'], style = [1, 1, 1]); // use same style, we override below
+
+// Get current graphic
+e = gce(); // get handle to plot entity
+lines = e.children; // these are the polyline handles
+
+// Apply dash styles and thickness manually
+lines(1).thickness = 1; // Dulong-Petit
+lines(1).line_style = 2; // dashed
+
+lines(2).thickness = 2; // Einstein
+lines(2).line_style = 4; // dotted
+
+lines(3).thickness = 3; // Debye
+lines(3).line_style = 5; // dash-dot
+
+// Labels and title
+xlabel("$T$", "fontsize", 3);
+ylabel("$C_v/NK_b$", "fontsize", 3);
+legend(["Dulong-Petits Law", "Einstein Dist", "Debye Dist."], "in_lower_right");
+title("Plot for Specific Heats of Solids");
