@@ -1,54 +1,63 @@
-clc;clear;clf;
-h=6.626e-34;
-k=1.38e-23;
-c=3e8;
-T=2000:1000:5000;
-T0=5000;
-w1=0.1:0.005:50;
-w=w1*1e14;
-A=8*3.14*h;
-for j=1:length(T)
-for i=1:length(w)
-up(j,i)=(A*(w(i)/c)^3)/(exp((h*w(i))/(k*T(j)))-1);
-ur(j,i)=(8*3.14*k*T(j)*w(i)^2)/(c^3);
-uw(j,i)=(A*(w(i)/c)^3)/(exp((h*w(i))/(k*T(j))));
+// Constants
+h = 6.626e-34;
+c = 3e8;
+k = 1.38e-23;
+
+T = [3000, 5000, 7000, 10000];
+nu = linspace(1e13, 1e15, 500);
+
+// Functions
+function B = planck(nu, T)
+    B = (8 * %pi * h .* nu.^3) ./ (c^3) ./ (exp((h .* nu) ./ (k * T)) - 1);
+endfunction
+
+function B = jeans(nu, T)
+    B = (8 * %pi * h .* nu.^2) ./ (c^3) * T;
+endfunction
+
+function B = wien(nu, T)
+    C = 1e-9;
+    B = C * nu.^3 .* exp(-h .* nu ./ (k * T));
+endfunction
+
+styles = [1 2 3 4]; // Line styles for BW compatibility
+labels = ["T = 3000K", "T = 5000K", "T = 7000K", "T = 10000K"];
+
+// Plot Planck's Law
+subplot(3,1,1)
+for i=1:4
+    y = planck(nu, T(i));
+    plot2d(nu, y, style=styles(i));
 end
-if T(j)==T0
-q=j;
+title("Planckx Law")
+xlabel("Frequency (Hz)")
+ylabel("Spectral Radiance")
+legend(labels, "topright");
+
+// Plot Jeans' Law
+subplot(3,1,2)
+for i=1:4
+    y = jeans(nu, T(i));
+    plot2d(nu, y, style=styles(i));
 end
-[p,x]=max(up(j,:));
-wmax(j)=w1(x);
-U(j)=(1e14*0.005)*sum(up(j,:))
+title("Jeans Law")
+xlabel("Frequency (Hz)")
+ylabel("Spectral Radiance")
+legend(labels, "topright");
+
+// Plot Wien's Law
+subplot(3,1,3)
+for i=1:4
+    y = wien(nu, T(i));
+    plot2d(nu, y, style=styles(i));
 end
-disp(q)
-subplot(2,2,1)
-plot(w1',up'(:,1),w1',up'(:,2),w1',up'(:,3),w1',up'(:,4),'linewidth',2)
-legend('T='+string(T)+'K')
-xlabel('$\lambda(\mu m)$','fontsize',3);
-ylabel('$u(\lambda)$','fontsize',3);
-title("Planks Law")
-subplot(2,2,4)
-T4=T.^4;E=U.*(c/4)
-plot(T4',E,'-o-','linewidth',2)
-title("Stefans Law")
-xlabel('$\lambda(\mu m)$','fontsize',3);
-ylabel('$u(\lambda)$','fontsize',3);
-[sigma,d]=reglin(T4,E');
-disp(sigma)
-subplot(2,2,3)
-ti=1./T;
-plot(T,wmax','-o-','linewidth',2)
-title("Weins Law")
-xlabel('$\lambda(\mu m)$','fontsize',3);
-ylabel('$u(\lambda)$','fontsize',3);
-[b,a]=reglin(ti,wmax');
-disp(b)
-subplot(2,2,2)
-plot(w1',up(q,:),w1',ur(q,:),w1',uw(q,:))
-title("comparison")
-legend('Plank Law','Reyleigh-Jean Law','Wein Law')
-xlabel('$\lambda(\mu m)$','fontsize',3);
-ylabel('$u(\lambda)$','fontsize',3);
-a=gca()
-a.data_bounds=[0,0;50,1.2e-15]
-//replot([0,0,50,1e-15])
+title("Wiens Law")
+xlabel("Frequency (Hz)")
+ylabel("Spectral Radiance")
+legend(labels, "topright");
+
+// Optional: Grid
+for i = 1:3
+    subplot(3,1,i)
+    set(gca(), "grid", [1 1]); // Enable grid
+end
