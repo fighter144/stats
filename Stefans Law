@@ -1,0 +1,22 @@
+// === Constant ===
+sigma = 5.670374419e-8; // Stefan–Boltzmann constant (W/m²·K⁴)
+
+// === Temperature Range ===
+T = linspace(100, 10000, 300); // in Kelvin
+
+// === Power Radiated per Unit Area ===
+P = sigma * T.^4;
+
+// === Normalize for easy comparison (optional)
+P = P / max(P);
+
+// === Plot with Red Line ===
+scf(); clf();
+plot2d(T, P, style=1); // style=1 = red
+
+// === Labels and Title ===
+xtitle("Stefan–Boltzmann Law", ...
+       "Temperature (K)", "Normalized Radiated Power (σT⁴)");
+
+// === Add Grid ===
+xgrid();
