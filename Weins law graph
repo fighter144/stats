@@ -1,0 +1,22 @@
+// Constants
+b = 2.897e-3;       // Wein's constant in m·K
+
+// Temperatures to compare (in Kelvin)
+T_values = [3000, 5000, 7000]; // Temperatures in Kelvin
+
+// Calculate peak wavelength for each temperature using Wein's Law
+lambda_max = b ./ T_values; // Wein's Law: lambda_max = b / T
+
+// Create a new figure for Wein's Law graph
+figure;
+
+// Plot Wein's Law: Temperature vs Peak Wavelength
+plot(T_values, lambda_max, 'ro-', 'LineWidth', 2, 'MarkerSize', 8);
+
+// Labeling the graph
+xlabel('Temperature (K)');
+ylabel('Peak Wavelength (m)');
+title("Weins Law: Peak Wavelength vs Temperature");
+
+// Enable grid
+xgrid();
