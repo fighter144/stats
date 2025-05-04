@@ -1,0 +1,50 @@
+// === Clear previous variables ===
+clear;
+
+// === Constants ===
+k_B = 1.380649e-23; // Boltzmann constant (J/K)
+h = 6.62607015e-34; // Planck's constant (J·s)
+c = 3e8; // Speed of light (m/s)%pi = %pi; // π constant
+pi=3.13
+// === Wavelength Range (0.2 μm to 10 μm) for better Rayleigh-Jeans approximation ===
+lambda = linspace(2e-7, 1e-5, 300); // in meters (0.2 μm to 10 μm)
+lambda_um = lambda * 1e6; // Convert to micrometers
+
+// === Temperature to Compare ===
+T = 5000; // Kelvin
+
+// === Preallocate for Radiance ===
+Planck_Radiance = zeros(1, length(lambda));
+Rayleigh_Radiance = zeros(1, length(lambda));
+Wien_Radiance = zeros(1, length(lambda));
+
+// === Calculate Radiance for each Law ===
+
+// Planck's Law
+Planck_Radiance = (2 * h * c^2) ./ (lambda.^5) .* (1 ./ (exp(h * c ./ (lambda * k_B * T)) - 1));
+
+// Rayleigh-Jeans Law (approximation at long wavelengths)
+Rayleigh_Radiance = (8 * pi * k_B * T) ./ (lambda.^4);
+
+// Wien's Law (peak wavelength)
+Wien_Radiance = (2 * pi * h * c^2) ./ (lambda.^5) .* exp(-h * c ./ (lambda * k_B * T));
+
+// === Plot Comparison Graph ===
+scf(); clf();
+
+// Plot Planck's Law
+plot2d(lambda_um, Planck_Radiance, style=1); // Red for Planck
+
+// Plot Rayleigh-Jeans Law
+plot2d(lambda_um, Rayleigh_Radiance, style=2); // Green for Rayleigh-Jeans
+
+// Plot Wien's Law
+plot2d(lambda_um, Wien_Radiance, style=3); // Blue for Wien
+
+// === Labels and Title ===
+xtitle("Comparison of Plancks, Rayleigh-Jeans, and Wiens Laws at 5000 K", ...
+       "Wavelength (μm)", "Spectral Radiance");
+
+// === Add Legend and Grid ===
+legend(["Planck 5000 K", "Rayleigh-Jeans 5000 K", "Wien 5000 K"], "in_upper_left");
+xgrid();
