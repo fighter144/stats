@@ -1,0 +1,44 @@
+// Constants
+h = 6.62607015e-34; // Planck's constant in J·s
+c = 3.0e8;          // Speed of light in m/s
+k_B = 1.380649e-23; // Boltzmann constant in J/K
+
+// Wavelength range (in meters)
+lambda = linspace(1e-9, 3e-6, 100); // From 1 nm to 3 um
+
+// Temperatures to compare (in Kelvin)
+T_values = [3000, 5000, 7000]; // Temperatures in Kelvin
+
+// Create a new figure
+figure;
+
+// Loop over different temperatures and plot Planck's law for each
+for i = 1:length(T_values)
+    T = T_values(i); // Current temperature
+    
+    // Planck's Law for energy per unit wavelength
+    planck = (8 * %pi * h * c) ./ (lambda.^5) .* (1 ./ (exp((h * c) ./ (lambda * k_B * T)) - 1));
+    
+    // Plot Planck's Law for the current temperature with different line styles and markers
+    if i == 1 then
+        plot(lambda, planck, 'r-', 'LineWidth', 2); // Red solid line for T = 3000 K
+    elseif i == 2 then
+        plot(lambda, planck, 'b--', 'LineWidth', 2); // Blue dashed line for T = 5000 K
+    else
+        plot(lambda, planck, 'm:', 'LineWidth', 2); // Magenta dotted line for T = 7000 K
+    end
+    
+    // Add a small delay if needed (uncomment next line to see gradual plotting)
+    // pause(0.5); 
+end
+
+// Labeling the graph
+xlabel('Wavelength (m)');
+ylabel('Energy per unit wavelength (J/m)');
+title("Plancks Law for Different Temperatures");
+
+// Add a legend with different line styles and markers
+legend(string(T_values(1)) + " K", string(T_values(2)) + " K", string(T_values(3)) + " K");
+
+// Add grid
+xgrid();
