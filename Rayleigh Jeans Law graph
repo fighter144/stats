@@ -1,0 +1,25 @@
+// === Constants ===
+k_B = 1.380649e-23; // Boltzmann constant (J/K)
+pi = %pi;
+
+// === Wavelength Range: 0.5 μm to 10 μm ===
+lambda = linspace(5e-7, 1e-5, 300); // in meters
+lambda_um = lambda * 1e6; // convert to micrometers
+
+// === Temperature ===
+T = 5000; // Kelvin
+
+// === Rayleigh-Jeans Spectral Radiance ===
+B = (8 * pi * k_B * T) ./ (lambda.^4);
+B = B / max(B); // Normalize
+
+// === Plot ===
+scf(); clf();
+plot2d(lambda_um, B, style=2); // style=2 is blue
+
+// === Labels and Title ===
+xtitle("Rayleigh–Jeans Law at T = 5000 K", ...
+       "Wavelength (μm)", "Normalized Spectral Radiance");
+
+// === Add Grid ===
+xgrid();
